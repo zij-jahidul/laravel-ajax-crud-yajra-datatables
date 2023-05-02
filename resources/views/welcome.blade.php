@@ -30,103 +30,113 @@
 
 
 
-<div class="container">
+    <div class="container">
 
-    <h1>Laravel Ajax CRUD Tutorial Example - ItSolutionStuff.com</h1>
+        <h1>Laravel Ajax CRUD Tutorial Example - ItSolutionStuff.com</h1>
 
-    <a class="btn btn-success" href="javascript:void(0)" id="createNewProduct"> Create New Product</a>
+        <a class="btn btn-success" href="javascript:void(0)" id="createNewProduct"> Create New Product</a>
 
-    <table class="table table-bordered data-table">
+        <table class="table table-bordered data-table">
 
-        <thead>
+            <thead>
 
-            <tr>
+                <tr>
 
-                <th>No</th>
+                    <th>No</th>
 
-                <th>Name</th>
+                    <th>Name</th>
 
-                <th>Details</th>
+                    <th>Image</th>
 
-                <th width="280px">Action</th>
+                    <th>Details</th>
 
-            </tr>
+                    <th width="280px">Action</th>
 
-        </thead>
+                </tr>
 
-        <tbody>
+            </thead>
 
-        </tbody>
+            <tbody>
 
-    </table>
+            </tbody>
 
-</div>
+        </table>
 
-
-
-<div class="modal fade" id="ajaxModel" aria-hidden="true">
-
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-
-                <h4 class="modal-title" id="modelHeading"></h4>
-
-            </div>
-
-            <div class="modal-body">
-
-                <form id="productForm" name="productForm" class="form-horizontal">
-
-                   <input type="hidden" name="product_id" id="product_id">
-
-                    <div class="form-group">
-
-                        <label for="name" class="col-sm-2 control-label">Name</label>
-
-                        <div class="col-sm-12">
-
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="" maxlength="50" required="">
-
-                        </div>
-
-                    </div>
+    </div>
 
 
 
-                    <div class="form-group">
+    <div class="modal fade" id="ajaxModel" aria-hidden="true">
 
-                        <label class="col-sm-2 control-label">Details</label>
+        <div class="modal-dialog">
 
-                        <div class="col-sm-12">
+            <div class="modal-content">
 
-                            <textarea id="detail" name="detail" required="" placeholder="Enter Details" class="form-control"></textarea>
+                <div class="modal-header">
+
+                    <h4 class="modal-title" id="modelHeading"></h4>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="productForm" name="productForm" class="form-horizontal" enctype="multipart/form-data">
+
+                        <input type="hidden" name="product_id" id="product_id">
+
+                        <div class="form-group">
+
+                            <label for="name" class="col-sm-2 control-label">Name</label>
+
+                            <div class="col-sm-12">
+
+                                <input type="text" class="form-control" id="name" name="name"
+                                    placeholder="Enter Name" value="" maxlength="50" required="">
+
+                            </div>
 
                         </div>
 
-                    </div>
+
+
+                        <div class="form-group">
+
+                            <label class="col-sm-2 control-label">Details</label>
+
+                            <div class="col-sm-12">
+
+                                <textarea id="detail" name="detail" required="" placeholder="Enter Details" class="form-control"></textarea>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Photo</label>
+                            <div class="col-sm-12">
+                                <input type="file" class="form-control" id="photo" name="photo">
+                            </div>
+                        </div>
 
 
 
-                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="col-sm-offset-2 col-sm-10">
 
-                     <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Save changes
+                            <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Save changes
 
-                     </button>
+                            </button>
 
-                    </div>
+                        </div>
 
-                </form>
+                    </form>
+
+                </div>
 
             </div>
 
         </div>
 
     </div>
-
-</div>
 
 
 
@@ -135,229 +145,242 @@
 
 
 <script type="text/javascript">
+    $(function() {
 
-  $(function () {
 
 
+        /*------------------------------------------
 
-    /*------------------------------------------
+         --------------------------------------------
 
-     --------------------------------------------
+         Pass Header Token
 
-     Pass Header Token
+         --------------------------------------------
 
-     --------------------------------------------
+         --------------------------------------------*/
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
 
-     --------------------------------------------*/
-
-    $.ajaxSetup({
-
-          headers: {
-
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
-          }
-
-    });
-
-
-
-    /*------------------------------------------
-
-    --------------------------------------------
-
-    Render DataTable
-
-    --------------------------------------------
-
-    --------------------------------------------*/
-
-    var table = $('.data-table').DataTable({
-
-        processing: true,
-
-        serverSide: true,
-
-        ajax: "{{ route('products-ajax-crud.index') }}",
-
-        columns: [
-
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-
-            {data: 'name', name: 'name'},
-
-            {data: 'detail', name: 'detail'},
-
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-
-        ]
-
-    });
-
-
-
-    /*------------------------------------------
-
-    --------------------------------------------
-
-    Click to Button
-
-    --------------------------------------------
-
-    --------------------------------------------*/
-
-    $('#createNewProduct').click(function () {
-
-        $('#saveBtn').val("create-product");
-
-        $('#product_id').val('');
-
-        $('#productForm').trigger("reset");
-
-        $('#modelHeading').html("Create New Product");
-
-        $('#ajaxModel').modal('show');
-
-    });
-
-
-
-    /*------------------------------------------
-
-    --------------------------------------------
-
-    Click to Edit Button
-
-    --------------------------------------------
-
-    --------------------------------------------*/
-
-    $('body').on('click', '.editProduct', function () {
-
-      var product_id = $(this).data('id');
-
-      $.get("{{ route('products-ajax-crud.index') }}" +'/' + product_id +'/edit', function (data) {
-
-          $('#modelHeading').html("Edit Product");
-
-          $('#saveBtn').val("edit-user");
-
-          $('#ajaxModel').modal('show');
-
-          $('#product_id').val(data.id);
-
-          $('#name').val(data.name);
-
-          $('#detail').val(data.detail);
-
-      })
-
-    });
-
-
-
-    /*------------------------------------------
-
-    --------------------------------------------
-
-    Create Product Code
-
-    --------------------------------------------
-
-    --------------------------------------------*/
-
-    $('#saveBtn').click(function (e) {
-
-        e.preventDefault();
-
-        $(this).html('Sending..');
-
-
-
-        $.ajax({
-
-          data: $('#productForm').serialize(),
-
-          url: "{{ route('products-ajax-crud.store') }}",
-
-          type: "POST",
-
-          dataType: 'json',
-
-          success: function (data) {
-
-
-
-              $('#productForm').trigger("reset");
-
-              $('#ajaxModel').modal('hide');
-
-              table.draw();
-
-
-
-          },
-
-          error: function (data) {
-
-              console.log('Error:', data);
-
-              $('#saveBtn').html('Save Changes');
-
-          }
-
-      });
-
-    });
-
-
-
-    /*------------------------------------------
-
-    --------------------------------------------
-
-    Delete Product Code
-
-    --------------------------------------------
-
-    --------------------------------------------*/
-
-    $('body').on('click', '.deleteProduct', function () {
-
-
-
-        var product_id = $(this).data("id");
-
-        confirm("Are You sure want to delete !");
-
-
-
-        $.ajax({
-
-            type: "DELETE",
-
-            url: "{{ route('products-ajax-crud.store') }}"+'/'+product_id,
-
-            success: function (data) {
-
-                table.draw();
-
-            },
-
-            error: function (data) {
-
-                console.log('Error:', data);
-
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             }
+        });
+
+        /*------------------------------------------
+        --------------------------------------------
+        Render DataTable
+        --------------------------------------------
+        --------------------------------------------*/
+
+        var table = $('.data-table').DataTable({
+
+            processing: true,
+
+            serverSide: true,
+
+            ajax: "{{ route('products-ajax-crud.index') }}",
+
+            columns: [
+
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex'
+                },
+
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+
+                {
+                    data: 'detail',
+                    name: 'detail'
+                },
+
+                {
+                    data: 'photo',
+                    name: 'photo'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+
+            ]
 
         });
 
+
+
+        /*------------------------------------------
+
+        --------------------------------------------
+
+        Click to Button
+
+        --------------------------------------------
+
+        --------------------------------------------*/
+
+        $('#createNewProduct').click(function() {
+
+            $('#saveBtn').val("create-product");
+
+            $('#product_id').val('');
+
+            $('#productForm').trigger("reset");
+
+            $('#modelHeading').html("Create New Product");
+
+            $('#ajaxModel').modal('show');
+
+        });
+
+
+
+        /*------------------------------------------
+
+        --------------------------------------------
+
+        Click to Edit Button
+
+        --------------------------------------------
+
+        --------------------------------------------*/
+
+        $('body').on('click', '.editProduct', function() {
+
+            var product_id = $(this).data('id');
+
+            $.get("{{ route('products-ajax-crud.index') }}" + '/' + product_id + '/edit', function(
+                data) {
+
+                $('#modelHeading').html("Edit Product");
+
+                $('#saveBtn').val("edit-user");
+
+                $('#ajaxModel').modal('show');
+
+                $('#product_id').val(data.id);
+
+                $('#name').val(data.name);
+
+                $('#photo').val(data.photo);
+
+                $('#detail').val(data.detail);
+
+            })
+
+        });
+
+
+
+        /*------------------------------------------
+
+        --------------------------------------------
+
+        Create Product Code
+
+        --------------------------------------------
+
+        --------------------------------------------*/
+
+        $('#saveBtn').click(function(e) {
+            e.preventDefault();
+            $(this).html('Sending..');
+            var formData = new FormData($('#productForm')[0]);
+            $.ajax({
+                data: formData,
+                url: "{{ route('products-ajax-crud.store') }}",
+                type: "POST",
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $('#productForm').trigger("reset");
+                    $('#ajaxModel').modal('hide');
+                    table.draw();
+                },
+                error: function(data) {
+                    console.log('Error:', data);
+                    $('#saveBtn').html('Save Changes');
+                }
+            });
+        });
+
+        // $('#saveBtn').click(function(e) {
+        //     e.preventDefault();
+        //     $(this).html('Sending..');
+        //     $.ajax({
+        //         data: $('#productForm').serialize(),
+        //         url: "{{ route('products-ajax-crud.store') }}",
+        //         type: "POST",
+        //         dataType: 'json',
+        //         success: function(data) {
+        //             $('#productForm').trigger("reset");
+        //             $('#ajaxModel').modal('hide');
+        //             table.draw();
+        //         },
+        //         error: function(data) {
+        //             console.log('Error:', data);
+        //             $('#saveBtn').html('Save Changes');
+        //         }
+        //     });
+        // });
+
+
+
+        /*------------------------------------------
+
+        --------------------------------------------
+
+        Delete Product Code
+
+        --------------------------------------------
+
+        --------------------------------------------*/
+
+        $('body').on('click', '.deleteProduct', function() {
+
+
+
+            var product_id = $(this).data("id");
+
+            confirm("Are You sure want to delete !");
+
+
+
+            $.ajax({
+
+                type: "DELETE",
+
+                url: "{{ route('products-ajax-crud.store') }}" + '/' + product_id,
+
+                success: function(data) {
+
+                    table.draw();
+
+                },
+
+                error: function(data) {
+
+                    console.log('Error:', data);
+
+                }
+
+            });
+
+        });
+
+
+
     });
-
-
-
-  });
-
 </script>
 
 </html>

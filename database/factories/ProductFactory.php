@@ -16,9 +16,13 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        // Generate a fake image URL
+        $imageUrl = $this->faker->imageUrl($width = 640, $height = 480, 'cats');
+
         return [
             'name' => $this->faker->name,
             'detail' => $this->faker->text,
+            'photo' => $imageUrl,
         ];
     }
 }
